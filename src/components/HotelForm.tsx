@@ -1,21 +1,20 @@
-
-import { useState } from 'react';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Hotel } from '@/types';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { 
+import { useState } from "react";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Hotel } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage 
-} from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
+  FormMessage,
+} from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 
 const hotelFormSchema = z.object({
   name: z.string().min(2, "Hotel name must be at least 2 characters"),
@@ -36,42 +35,50 @@ interface HotelFormProps {
   onCancel: () => void;
 }
 
-export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) => {
+export const HotelForm = ({
+  initialData,
+  onSubmit,
+  onCancel,
+}: HotelFormProps) => {
   const { toast } = useToast();
-  
-  const defaultValues = initialData ? {
-    ...initialData,
-    price: initialData.price
-  } : {
-    name: '',
-    description: '',
-    address: '',
-    city: '',
-    country: '',
-    price: 0,
-    rating: 0,
-    featured: false,
-  };
+
+  const defaultValues = initialData
+    ? {
+        ...initialData,
+        price: initialData.price,
+      }
+    : {
+        name: "",
+        description: "",
+        address: "",
+        city: "",
+        country: "",
+        price: 0,
+        rating: 0,
+        featured: false,
+      };
 
   const form = useForm<HotelFormValues>({
     resolver: zodResolver(hotelFormSchema),
-    defaultValues
+    defaultValues,
   });
 
   const [images, setImages] = useState<string[]>(initialData?.images || []);
-  const [imageUrl, setImageUrl] = useState<string>('');
-  const [amenities, setAmenities] = useState<string[]>(initialData?.amenities || []);
-  const [amenityInput, setAmenityInput] = useState<string>('');
-  
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [amenities, setAmenities] = useState<string[]>(
+    initialData?.amenities || []
+  );
+  const [amenityInput, setAmenityInput] = useState<string>("");
+
   const addImage = () => {
     if (imageUrl && !images.includes(imageUrl)) {
       setImages([...images, imageUrl]);
-      setImageUrl('');
+      setImageUrl("");
     } else {
       toast({
         title: "Error",
         description: "Please provide a valid image URL that hasn't been added",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -85,12 +92,12 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
   const addAmenity = () => {
     if (amenityInput && !amenities.includes(amenityInput)) {
       setAmenities([...amenities, amenityInput]);
-      setAmenityInput('');
+      setAmenityInput("");
     } else {
       toast({
         title: "Error",
         description: "Please provide a valid amenity that hasn't been added",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -127,7 +134,7 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="description"
@@ -141,7 +148,7 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
             </FormItem>
           )}
         />
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -156,7 +163,7 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="city"
@@ -171,7 +178,7 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
             )}
           />
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -186,7 +193,7 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="price"
@@ -194,14 +201,19 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
               <FormItem>
                 <FormLabel>Price</FormLabel>
                 <FormControl>
-                  <Input type="number" min="0" placeholder="Price per night" {...field} />
+                  <Input
+                    type="number"
+                    min="0"
+                    placeholder="Price per night"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -210,13 +222,20 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
               <FormItem>
                 <FormLabel>Rating (0-5)</FormLabel>
                 <FormControl>
-                  <Input type="number" min="0" max="5" step="0.1" placeholder="Rating" {...field} />
+                  <Input
+                    type="number"
+                    min="0"
+                    max="5"
+                    step="0.1"
+                    placeholder="Rating"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="featured"
@@ -237,7 +256,7 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
             )}
           />
         </div>
-        
+
         {/* Images */}
         <div className="space-y-2">
           <h3 className="font-medium">Images</h3>
@@ -247,17 +266,26 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="Enter image URL"
             />
-            <Button type="button" onClick={addImage} variant="outline">Add</Button>
+            <Button type="button" onClick={addImage} variant="outline">
+              Add
+            </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
             {images.map((img, idx) => (
-              <div key={idx} className="border rounded-md p-2 flex items-center justify-between">
+              <div
+                key={idx}
+                className="border rounded-md p-2 flex items-center justify-between"
+              >
                 <div className="flex items-center">
-                  <img src={img} alt="Hotel preview" className="w-12 h-12 object-cover rounded mr-2" />
+                  <img
+                    src={img}
+                    alt="Hotel preview"
+                    className="w-12 h-12 object-cover rounded mr-2"
+                  />
                   <span className="text-sm truncate max-w-[160px]">{img}</span>
                 </div>
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   onClick={() => removeImage(idx)}
                   variant="ghost"
                   size="sm"
@@ -268,7 +296,7 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
             ))}
           </div>
         </div>
-        
+
         {/* Amenities */}
         <div className="space-y-2">
           <h3 className="font-medium">Amenities</h3>
@@ -278,13 +306,18 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
               onChange={(e) => setAmenityInput(e.target.value)}
               placeholder="Enter amenity"
             />
-            <Button type="button" onClick={addAmenity} variant="outline">Add</Button>
+            <Button type="button" onClick={addAmenity} variant="outline">
+              Add
+            </Button>
           </div>
           <div className="flex flex-wrap gap-2 mt-2">
             {amenities.map((amenity, idx) => (
-              <div key={idx} className="bg-gray-100 rounded-md px-2 py-1 flex items-center gap-1">
+              <div
+                key={idx}
+                className="bg-gray-100 rounded-md px-2 py-1 flex items-center gap-1"
+              >
                 <span className="text-sm">{amenity}</span>
-                <button 
+                <button
                   type="button"
                   onClick={() => removeAmenity(idx)}
                   className="text-gray-400 hover:text-gray-600"
@@ -295,10 +328,14 @@ export const HotelForm = ({ initialData, onSubmit, onCancel }: HotelFormProps) =
             ))}
           </div>
         </div>
-        
+
         <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-          <Button type="submit">{initialData ? 'Update' : 'Create'} Hotel</Button>
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit">
+            {initialData ? "Update" : "Create"} Hotel
+          </Button>
         </div>
       </form>
     </Form>

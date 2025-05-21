@@ -1,17 +1,16 @@
-
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { 
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage 
-} from '@/components/ui/form';
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -19,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Hotel } from "@/types";
 
 const staffFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -31,26 +31,33 @@ const staffFormSchema = z.object({
 type StaffFormValues = z.infer<typeof staffFormSchema>;
 
 interface StaffFormProps {
-  initialData?: any;
-  hotels: any[];
+  initialData?: StaffFormValues;
+  hotels: Hotel[];
   onSubmit: (data: StaffFormValues) => void;
   onCancel: () => void;
 }
 
-export const StaffForm = ({ initialData, hotels, onSubmit, onCancel }: StaffFormProps) => {
-  const defaultValues = initialData ? {
-    ...initialData,
-  } : {
-    name: '',
-    email: '',
-    role: 'staff',
-    phone: '',
-    hotelId: '',
-  };
+export const StaffForm = ({
+  initialData,
+  hotels,
+  onSubmit,
+  onCancel,
+}: StaffFormProps) => {
+  const defaultValues = initialData
+    ? {
+        ...initialData,
+      }
+    : {
+        name: "",
+        email: "",
+        role: "staff",
+        phone: "",
+        hotelId: "",
+      };
 
   const form = useForm<StaffFormValues>({
     resolver: zodResolver(staffFormSchema),
-    defaultValues
+    defaultValues,
   });
 
   return (
@@ -69,7 +76,7 @@ export const StaffForm = ({ initialData, hotels, onSubmit, onCancel }: StaffForm
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="email"
@@ -83,7 +90,7 @@ export const StaffForm = ({ initialData, hotels, onSubmit, onCancel }: StaffForm
             </FormItem>
           )}
         />
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -91,8 +98,8 @@ export const StaffForm = ({ initialData, hotels, onSubmit, onCancel }: StaffForm
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Role</FormLabel>
-                <Select 
-                  onValueChange={field.onChange} 
+                <Select
+                  onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
@@ -113,7 +120,7 @@ export const StaffForm = ({ initialData, hotels, onSubmit, onCancel }: StaffForm
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
             name="phone"
@@ -128,17 +135,14 @@ export const StaffForm = ({ initialData, hotels, onSubmit, onCancel }: StaffForm
             )}
           />
         </div>
-        
+
         <FormField
           control={form.control}
           name="hotelId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Assigned Hotel</FormLabel>
-              <Select 
-                onValueChange={field.onChange} 
-                defaultValue={field.value}
-              >
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a hotel" />
@@ -146,7 +150,9 @@ export const StaffForm = ({ initialData, hotels, onSubmit, onCancel }: StaffForm
                 </FormControl>
                 <SelectContent>
                   {hotels.map((hotel) => (
-                    <SelectItem key={hotel.id} value={hotel.id}>{hotel.name}</SelectItem>
+                    <SelectItem key={hotel.id} value={hotel.id}>
+                      {hotel.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -154,10 +160,14 @@ export const StaffForm = ({ initialData, hotels, onSubmit, onCancel }: StaffForm
             </FormItem>
           )}
         />
-        
+
         <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-          <Button type="submit">{initialData ? 'Update' : 'Create'} Staff</Button>
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit">
+            {initialData ? "Update" : "Create"} Staff
+          </Button>
         </div>
       </form>
     </Form>
